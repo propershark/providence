@@ -1,0 +1,11 @@
+:transport:
+  :wamp:
+    :uri:         ws://127.0.0.1:8080/ws/
+    :realm:       realm1
+    :authid:      tester2
+    :authmethods: ['anonymous']
+
+:strategies:
+  - :bart: 
+    :api_key:     MW9S-E7SL-26DU-VV8V
+  - :timetable

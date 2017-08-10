@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'trollop'
+require_relative '../runner'
+
+opts = Trollop::options do
+  opt :transport, 'URI of the WAMP transport to connect to', short: 't', default: 'ws://localhost:8080/ws'
+end
+
+runner = Providence::Runner.new opts
+runner.start
