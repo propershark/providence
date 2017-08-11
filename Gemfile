@@ -9,7 +9,7 @@ gem 'httparty'
 gem 'eventmachine'
 
 # API wrappers for transit agencies
-gem 'bart_api', :path => '~/ps/bart_api'
+gem 'bart_api', :git => 'https://github.com/propershark/bart_api.git'
 
 # Option parsing for CLIs
 gem 'trollop'
