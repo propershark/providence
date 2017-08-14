@@ -10,10 +10,7 @@ class Agency
   end
 
   def activate 
-    EM.add_periodic_timer(AGENCY_REFRESH) do
-      fetch_routes
-    end
-
+    EM.add_periodic_timer(AGENCY_REFRESH) { fetch_routes }
     fetch_routes
   end
 

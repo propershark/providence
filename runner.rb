@@ -31,6 +31,8 @@ module Providence
           transport.register 'providence.visits_between', &dispatcher.method(:do_visits_between)
           puts "Listening on #{transport.uri}"
         end
+
+        Signal.trap('INT') { transport.close; exit }
       end
     end
   end

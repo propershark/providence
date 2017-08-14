@@ -12,12 +12,23 @@ class Transport
   alias_method :once_joined, :callback
 
   def initialize
-    @wamp_client = WampClient::Connection.new configuration.wamp
-    @wamp_client.on_join { |session, _| succeed session }
+    begin
+      @wamp_client = WampClient::Connection.new configuration.wamp
+      @wamp_client.on_join { |session, _| succeed session }
+    rescue Exception => e
+      abort e
+      require 'pry'; binding.pry
+    end
   end
 
-  def open
-    @thread = Thread.new { @wamp_client.open }
+  # Opens the connection. WampClient::Connection#open calls EM.run, which
+  # blocks the thread unless it is already in the context of an EM reactor.
+  def open async: false
+    if async
+      Thread.new { @wamp_client.open }
+    else
+      @wamp_client.open
+    end
     self
   end
 
@@ -27,6 +38,10 @@ class Transport
 
   def uri
     configuration.wamp[:uri]
+  end
+
+  def close
+    @wamp_client.close
   end
 
   def subscribe topic
