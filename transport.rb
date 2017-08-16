@@ -21,14 +21,8 @@ class Transport
     end
   end
 
-  # Opens the connection. WampClient::Connection#open calls EM.run, which
-  # blocks the thread unless it is already in the context of an EM reactor.
-  def open async: false
-    if async
-      Thread.new { @wamp_client.open }
-    else
-      @wamp_client.open
-    end
+  def open
+    @thread = Thread.new { @wamp_client.open }
     self
   end
 
@@ -38,10 +32,6 @@ class Transport
 
   def uri
     configuration.wamp[:uri]
-  end
-
-  def close
-    @wamp_client.close
   end
 
   def subscribe topic
