@@ -36,12 +36,9 @@ module Providence
         #{result}
         EOF
       end
-      EM::DefaultDeferrable.new.tap do |defer|
-        @strategies.lazy.map do |strategy| 
-          strategy.visits_between(station, start_time, end_time, 
-                                  limit) { |r| defer.succeed r; log.call r }
-        end.select(&:itself).first
-      end
+      @strategies.lazy.map do |strategy| 
+        strategy.visits_between(station, start_time, end_time, limit)
+      end.select(&:itself).first.callback { |result| log.call result }
     end
   end
 end

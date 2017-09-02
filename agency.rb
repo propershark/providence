@@ -11,18 +11,15 @@ class Agency
 
   def activate 
     EM.add_periodic_timer(AGENCY_REFRESH) do
-      fetch_routes
+      fetch_routes.errback(&$stderr.method(:puts))
     end
 
     fetch_routes
   end
 
   def fetch_routes
-    EM::DefaultDeferrable.new.tap do |defer|
-      @transport.call 'agency.routes' do |routes|
-        defer.succeed routes
-        @routes = routes.args.first.values
-      end
+    @transport.call('agency.routes').callback do |routes|
+      @routes = routes.args.first.values
     end
   end
 end

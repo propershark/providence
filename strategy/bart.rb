@@ -16,18 +16,26 @@ class BartStrategy < TimetableStrategy
   def visits_between station, start_time, end_time, limit
     return nil if (start_time - Time.now).abs > refresh_time 
 
-    estimates_at(station).callback do |estimates| 
+    result = EM::DefaultDeferrable.new
+    on_estimates = proc do |estimates|
       arrivals = transform(estimates).first(2)
       if arrivals.count < limit
         # If BART didn't provide enough results, ask Timetable for more.
-        super(station, Time.parse(arrivals.last[0]), end_time, 
-              limit - arrivals.count) do |tt_arrivals|
-          yield arrivals + tt_arrivals 
-        end
+        EM::Deferrable.future(super(station, 
+                                    Time.parse(arrivals.last[0]), 
+                                    end_time, 
+                                    limit - arrivals.count),
+                              proc { |tt_arrivals| result.succeed arrivals + tt_arrivals },
+                              result.method(:fail))
       else
-        yield arrivals
+        result.succeed arriavls
       end
     end
+
+    EM::Deferrable.future(estimates_at(station),
+                          on_estimates,
+                          result.method(:fail))
+    result
   end
 
   private

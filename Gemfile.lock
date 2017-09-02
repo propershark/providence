@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/propershark/bart_api.git
-  revision: db0a3122987ddf6866c9b3cf75a44935eff8d368
+  revision: 5a7cb092806e2f2de7f03cc34536faa2cd2b6107
   specs:
     bart_api (0.1.0)
       httparty (~> 0.13)
@@ -9,14 +9,14 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    byebug (9.0.6)
+    byebug (9.1.0)
     coderay (1.1.1)
     et-orbi (1.0.5)
       tzinfo
     eventmachine (1.2.5)
     httparty (0.15.6)
       multi_xml (>= 0.5.2)
-    json (1.8.6)
+    json (2.1.0)
     memoist (0.16.0)
     method_source (0.8.2)
     multi_xml (0.6.0)
@@ -24,8 +24,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    pry-byebug (3.4.2)
-      byebug (~> 9.0)
+    pry-byebug (3.5.0)
+      byebug (~> 9.1)
       pry (~> 0.10)
     rufus-scheduler (3.4.2)
       et-orbi (~> 1.0)
@@ -34,15 +34,15 @@ GEM
     trollop (2.1.2)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
-    wamp_client (0.0.7)
-      json (~> 1.8.3)
-      websocket-eventmachine-client (~> 1.1.0)
+    wamp_client (0.0.8)
+      json
+      websocket-eventmachine-client
     websocket (1.2.4)
     websocket-eventmachine-base (1.2.0)
       eventmachine (~> 1.0)
       websocket (~> 1.0)
       websocket-native (~> 1.0)
-    websocket-eventmachine-client (1.1.0)
+    websocket-eventmachine-client (1.2.0)
       websocket-eventmachine-base (~> 1.0)
     websocket-native (1.0.0)
 

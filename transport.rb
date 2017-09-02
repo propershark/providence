@@ -54,12 +54,14 @@ class Transport
   end
 
   def call rpc, args: nil, kwargs: nil
+    result = EM::DefaultDeferrable.new
     once_joined do |session|
-      session.call rpc, args, kwargs do |result, error, details|
-        abort error if error
-        yield result
+      session.call rpc, args, kwargs do |response, error, details|
+        result.fail error if error
+        result.succeed response
       end
     end
+    result
   end
 
   # When `rpc` is invoked, the block given will be called and its result will
@@ -75,7 +77,12 @@ class Transport
         raise e
       end
       if result.is_a? EM::Deferrable
-        WampClient::Defer::CallDefer.new.tap { |d| result.callback { |r| d.succeed r } }
+        WampClient::Defer::CallDefer.new.tap do |defer| 
+          result.callback &defer.method(:succeed)
+          result.errback  &defer.method(:fail)
+          #result.callback { |r| defer.succeed r }
+          #result.errback  { |r| defer.fail r }
+        end
       else
         result
       end
